@@ -12,6 +12,7 @@ import base64
 from PIL import Image
 import win32com.client
 import pythoncom
+from bin.repository import *
 class Word_2_PDF(object):
 
     def __init__(self, filepath, Debug=False):  # param Debug: 控制过程是否可视化
@@ -26,7 +27,7 @@ class Word_2_PDF(object):
     def export_pdf(self, output_file_path):  # 将Word文档转化为PDF文件
         self.myDoc.ExportAsFixedFormat(os.path.abspath('.\\' + output_file_path), 17, Item=7, CreateBookmarks=0)
 
-def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno, subject, examtime, photo):
+def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno, subject, examtime, photo, business_id, business_type, created_by):
     document = Document('templates\\准考证模板.docx')  #打开文件demo.docx
     # 查看文本框
     children = document.element.body.iter()
@@ -144,6 +145,10 @@ def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno,
         w2p.export_pdf(os.path.join(rootpath, eachpdfname))
         # print("文件名：", eachpdfname)
         w2p.myDoc.Close()
+        fileinfo = os.stat(os.path.join(rootpath, eachpdfname))  # 获取文件的基本信息
+        repository = Repository()
+        filepath_db = os.path.join(rootpath, eachpdfname).replace("\\", "/")
+        repository.saveExamineeCardAtt(eachpdfname, filepath_db, fileinfo.st_size, 'pdf', business_id, business_type, created_by)
 
 
 

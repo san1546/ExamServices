@@ -48,7 +48,7 @@ def TestNoServer(server):
                 openWord(item[i]['testno'], item[i]['cname'], item[i]['ename'],
                          item[i]['idno'], item[i]['school'], item[i]['examno'],
                          item[i]['seatno'], item[i]['scale'], item[i]['examDate']+' '+item[i]['examTime'],
-                         item[i]['photo'])
+                         item[i]['photo'], item[i]['businessId'], item[i]['businessType'], item[i]['createdBy'])
         except Exception:
             res = {'msg': '注意：系统出错，请重新提交数据'}  # 给用户返回的信息
             json_res = json.dumps(res, ensure_ascii=False)  # 返回结果为json格式
