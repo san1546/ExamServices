@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
 import config.setting as config
+import sys
+
 # import redis
 from lib.interface import *
 from flask_cors import CORS
+
+print(sys.path)
+
 
 server = flask.Flask(__name__)
 CORS(server, resources=r'/*')

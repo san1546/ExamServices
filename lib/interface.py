@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import flask, time, json
 from bin.printTestNo import *
 from lib import tools
@@ -32,7 +33,7 @@ def TestNoServer(server):
     @server.route('/printTestNo', methods=['post'])
     def printTestNo():
         item = flask.request.get_json()
-        print("item:", item[0])
+        print("item:", item)
         # print("flag:", validate({"name": "Eggs", "price": 34.99}, schema))
         # print("flag:", validate(item, schema))
         try:

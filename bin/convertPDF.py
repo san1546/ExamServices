@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import subprocess
 import os
 try:
@@ -10,6 +11,7 @@ def doc2pdf(doc):
     convert a doc/docx document to pdf format
     :param doc: path to document
     """
+    global worddoc, word
     doc = os.path.abspath(doc)  # bugfix - searching files in windows/system32
     if client is None:
         return doc2pdf_linux(doc)
