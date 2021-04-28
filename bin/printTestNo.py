@@ -131,9 +131,9 @@ def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno,
         os.makedirs(rootpath)
     document.save(rootpath + '\\' + testno + '.docx')  # 保存文档
 
-    filelist = os.listdir(rootpath)
-    docfilelist = [i for i in filelist if (i.endswith('doc') or i.endswith('docx'))]
-
+    # filelist = os.listdir(rootpath)
+    # docfilelist = [i for i in filelist if (i.endswith('doc') or i.endswith('docx'))]
+    docfilelist = [testno + '.docx']
     # print('rootpath:', rootpath)
     # print("filelist:", filelist)
     # print("docfilelist:", docfilelist)
