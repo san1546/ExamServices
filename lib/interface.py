@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import traceback
+
 import flask, time, json
 from bin.printTestNo import *
 from lib import tools
@@ -51,6 +53,8 @@ def TestNoServer(server):
                          item[i]['seatno'], item[i]['scale'], item[i]['examDate']+' '+item[i]['examTime'],
                          item[i]['photo'], item[i]['businessId'], item[i]['businessType'], item[i]['createdBy'])
         except Exception:
+            # print("Exception:", traceback.print_exc())
+            traceback.print_exc()
             res = {'msg': '注意：系统出错，请重新提交数据'}  # 给用户返回的信息
             json_res = json.dumps(res, ensure_ascii=False)  # 返回结果为json格式
             res = flask.make_response(json_res)  # cookie 构造成返回结果的对象

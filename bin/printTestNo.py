@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import subprocess
+
 from docx import Document
 import xlrd
 import xlsxwriter
@@ -10,25 +13,22 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 import os
 import base64
 from PIL import Image
-import win32com.client
-import pythoncom
+# import win32com.client
+# import pythoncom
 from bin.repository import *
-class Word_2_PDF(object):
-
-    def __init__(self, filepath, Debug=False):  # param Debug: 控制过程是否可视化
-        pythoncom.CoInitialize()
-        self.wordApp = win32com.client.Dispatch('word.Application')
-        self.wordApp.Visible = Debug
-        # print("filepath:", filepath)
-        # print("path:", os.path.abspath('.\\' + filepath))
-        # self.myDoc = self.wordApp.Documents.Open(filepath)
-        self.myDoc = self.wordApp.Documents.Open(os.path.abspath('.\\' + filepath))
-
-    def export_pdf(self, output_file_path):  # 将Word文档转化为PDF文件
-        self.myDoc.ExportAsFixedFormat(os.path.abspath('.\\' + output_file_path), 17, Item=7, CreateBookmarks=0)
+# class Word_2_PDF(object):
+#
+#     def __init__(self, filepath, Debug=False):  # param Debug: 控制过程是否可视化
+#         pythoncom.CoInitialize()
+#         self.wordApp = win32com.client.Dispatch('word.Application')
+#         self.wordApp.Visible = Debug
+#         self.myDoc = self.wordApp.Documents.Open(os.path.abspath('.\\' + filepath))
+#
+#     def export_pdf(self, output_file_path):  # 将Word文档转化为PDF文件
+#         self.myDoc.ExportAsFixedFormat(os.path.abspath('.\\' + output_file_path), 17, Item=7, CreateBookmarks=0)
 
 def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno, subject, examtime, photo, business_id, business_type, created_by):
-    document = Document('templates\\准考证模板.docx')  #打开文件demo.docx
+    document = Document('templates/准考证模板.docx')  #打开文件demo.docx
     # 查看文本框
     children = document.element.body.iter()
     child_iters = []
@@ -89,17 +89,22 @@ def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno,
             k = 1
 
     # print("table数:", len(document.tables))
+    mark = str(uuid.uuid1())
     if photo:
         run = document.tables[0].cell(0, 0).paragraphs[0].add_run()
-        type = photo[11:15]
+        filetype = photo[11:15].split(";")[0]
+        print("filetype:", filetype)
         imgdata = base64.b64decode(photo.split(",")[1])
         # print("imgdata:", imgdata)
-        if not os.path.exists('准考证\\' + examsite):
-            os.makedirs('准考证\\' + examsite)
-        file = open('准考证\\' + '1.' + type, 'wb')
+        if not os.path.exists('testno/' + mark):
+            os.makedirs('testno/' + mark)
+        file = open('testno/' + mark + '/temp.' + filetype, 'wb')
         file.write(imgdata)
         file.close()
-        run.add_picture('准考证\\' + '1.' + type, height=Inches(1.287), width=Inches(0.9))
+        f = Image.open('testno/' + mark + '/temp.' + filetype)  # 你的图片文件
+        f.save('testno/' + mark + '/temp.' + filetype)  # 替换掉你的图片文件
+        f.close()
+        run.add_picture('testno/' + mark + '/temp.' + filetype, height=Inches(1.287), width=Inches(0.9))
 
 
     tb = document.tables[1]
@@ -126,30 +131,43 @@ def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno,
         # print(row_data)
 
 
-    rootpath = '准考证\\' + examsite
+    # rootpath = 'testno/' + examsite + '_' + mark + '/'
+    rootpath = 'testno/' + mark + '/'
     if not os.path.exists(rootpath):
         os.makedirs(rootpath)
-    document.save(rootpath + '\\' + testno + '.docx')  # 保存文档
+    document.save(rootpath + '/' + testno + '.docx')  # 保存文档
 
-    # filelist = os.listdir(rootpath)
-    # docfilelist = [i for i in filelist if (i.endswith('doc') or i.endswith('docx'))]
     docfilelist = [testno + '.docx']
-    # print('rootpath:', rootpath)
-    # print("filelist:", filelist)
-    # print("docfilelist:", docfilelist)
+    # win doc转pdf
+    # for eachdocname in docfilelist:
+    #     # print('路径：', os.path.join(rootpath, eachdocname))
+    #     w2p = Word_2_PDF(os.path.join(rootpath, eachdocname), False)
+    #     eachpdfname = eachdocname[:eachdocname.rfind('.')] + '.pdf'
+    #     # print('另一个pdf路径：', os.path.join(rootpath, eachpdfname))
+    #     w2p.export_pdf(os.path.join(rootpath, eachpdfname))
+    #     # print("文件名：", eachpdfname)
+    #     w2p.myDoc.Close()
+    #     fileinfo = os.stat(os.path.join(rootpath, eachpdfname))  # 获取文件的基本信息
+    #     repository = Repository()
+    #     filepath_db = os.path.join(rootpath, eachpdfname).replace("\\", "/")
+    #     repository.saveExamineeCardAtt(eachpdfname, filepath_db, fileinfo.st_size, 'pdf', business_id, business_type, created_by)
+    # linux doc转pdf
     for eachdocname in docfilelist:
-        # print('路径：', os.path.join(rootpath, eachdocname))
-        w2p = Word_2_PDF(os.path.join(rootpath, eachdocname), False)
-        eachpdfname = eachdocname[:eachdocname.rfind('.')] + '.pdf'
-        # print('另一个pdf路径：', os.path.join(rootpath, eachpdfname))
-        w2p.export_pdf(os.path.join(rootpath, eachpdfname))
-        # print("文件名：", eachpdfname)
-        w2p.myDoc.Close()
-        fileinfo = os.stat(os.path.join(rootpath, eachpdfname))  # 获取文件的基本信息
-        repository = Repository()
-        filepath_db = os.path.join(rootpath, eachpdfname).replace("\\", "/")
-        repository.saveExamineeCardAtt(eachpdfname, filepath_db, fileinfo.st_size, 'pdf', business_id, business_type, created_by)
-
+        print("eachdocname:", eachdocname)
+        doc = os.path.join(rootpath, eachdocname)
+        print("doc:", doc)
+        cmd = 'soffice --headless --convert-to pdf'.split() + [doc] + ' --outdir '.split() + [rootpath]
+        print("cmd:", cmd)
+        p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        p.wait(timeout=10)
+        stdout, stderr = p.communicate()
+        # eachpdfname = eachdocname[:eachdocname.rfind('.')] + '.pdf'
+        if stderr:
+            raise subprocess.SubprocessError(stderr)
+        # fileinfo = os.stat(os.path.join(rootpath, eachpdfname))  # 获取文件的基本信息
+        # repository = Repository()
+        # filepath_db = os.path.join(rootpath, eachpdfname).replace("\\", "/")
+        # repository.saveExamineeCardAtt(eachpdfname, filepath_db, fileinfo.st_size, 'pdf', business_id, business_type, created_by)
 
 
 
