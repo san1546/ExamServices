@@ -156,7 +156,7 @@ def openWord(testno, chinese_name, english_name, idno, examsite, examno, seatno,
         print("eachdocname:", eachdocname)
         doc = os.path.join(rootpath, eachdocname)
         print("doc:", doc)
-        cmd = 'soffice --headless --convert-to pdf'.split() + [doc] + ' --outdir '.split() + [rootpath]
+        cmd = '/usr/bin/libreoffice7.1 --headless --convert-to pdf'.split() + [doc] + ' --outdir '.split() + [rootpath]
         print("cmd:", cmd)
         p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         p.wait(timeout=10)
