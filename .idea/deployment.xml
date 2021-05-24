@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="centos7">
+  <component name="PublishConfigData" serverName="centos7（测试服务器）">
     <serverData>
-      <paths name="centos7">
+      <paths name="centos7(生产服务器)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ExamServices" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="centos7（测试服务器）">
         <serverdata>
           <mappings>
             <mapping deploy="/ExamServices" local="$PROJECT_DIR$" web="/" />
@@ -10,6 +17,5 @@
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

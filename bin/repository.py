@@ -5,7 +5,8 @@ import time
 class Repository:
     def __init__(self):
         try:
-            db = pymysql.Connect(host="172.28.28.86", port=3306, user="root", password="san1546", database="hwcsWeb", charset='utf8')
+            db = pymysql.Connect(host="rm-wz92099r66qstfwr0lo.mysql.rds.aliyuncs.com", port=3306, user="huawenshuiping", password="huawenshuiping123456", database="hwcsWeb", charset='utf8')
+            # db = pymysql.Connect(host="172.28.28.86", port=3306, user="root", password="san1546", database="hwcsWeb", charset='utf8')
             self.db = db
         except Exception as e:
             print(e)

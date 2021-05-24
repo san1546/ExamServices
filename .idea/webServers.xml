@@ -2,12 +2,20 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="3b0298d9-e93b-4aee-9b51-382c73f56bd9" name="centos7" url="http://localhost">
+      <webServer id="3b0298d9-e93b-4aee-9b51-382c73f56bd9" name="centos7（测试服务器）" url="http://localhost">
         <fileTransfer host="localhost" port="10001" rootFolder="/root" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
           <option name="port" value="10001" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="7c21e8eb-1eb9-4c3a-9d5a-33d71f8e5277" name="centos7(生产服务器)" url="http://39.108.13.175">
+        <fileTransfer host="39.108.13.175" port="22" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
         </fileTransfer>
       </webServer>
     </option>

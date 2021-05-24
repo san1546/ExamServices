@@ -32,7 +32,7 @@ schema = {
 # validate({"name" : "Eggs", "price" : 34.99}, schema)
 
 def TestNoServer(server):
-    @server.route('/printTestNo', methods=['post'])
+    @server.route('/api/printTestNo', methods=['post'])
     def printTestNo():
         item = flask.request.get_json()
         print("item:", item)
